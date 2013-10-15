@@ -35,6 +35,10 @@ public class PictureTransformModule {
     }
   }
 
+  public PictureTransformModule() {
+    this(AIMJNI.new_PictureTransformModule(), true);
+  }
+
   public void Tick() {
     AIMJNI.PictureTransformModule_Tick(swigCPtr, this);
   }
@@ -45,10 +49,6 @@ public class PictureTransformModule {
 
   public AIMandroidReadPort_t androidReadPort() {
     return new AIMandroidReadPort_t(AIMJNI.PictureTransformModule_androidReadPort(swigCPtr, this), true);
-  }
-
-  public PictureTransformModule() {
-    this(AIMJNI.new_PictureTransformModule(), true);
   }
 
 }

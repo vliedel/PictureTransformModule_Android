@@ -8,5 +8,7 @@
 
 package org.dobots.picturetransformmodule;
 
-public class AIM implements AIMConstants {
+public interface AIMConstants {
+  public final static int cimg_verbosity = AIMJNI.cimg_verbosity_get();
+  public final static int cimg_display = AIMJNI.cimg_display_get();
 }

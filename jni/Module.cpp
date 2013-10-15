@@ -2,11 +2,24 @@
 #include <iostream>
 #include <unistd.h> // To use usleep()
 
+using namespace cimg_library;
+
+PictureTransformModule::PictureTransformModule() {
+	mIntImg.resize(10, 10, 1, 1); // Size 10*10*1*1
+	mIndex = 0;
+}
+
 void PictureTransformModule::Tick() {
 	int* readInt = readPort(false);
 	if (readInt != NULL) {
 		std::cout << "Read: " << *readInt << std::endl;
-		writePort(*readInt);
+		if (mIndex < 10*10) {
+			mIntImg(mIndex) = *readInt;
+			++mIndex;
+		}
+
+		//writePort(*readInt);
+		writePort(mIntImg.mean());
 	}
 	usleep(1000*1000);
 }

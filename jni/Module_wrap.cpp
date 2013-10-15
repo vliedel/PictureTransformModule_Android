@@ -218,6 +218,30 @@ static void SWIGUNUSED SWIG_JavaThrowException(JNIEnv *jenv, SWIG_JavaExceptionC
 extern "C" {
 #endif
 
+SWIGEXPORT jint JNICALL Java_org_dobots_picturetransformmodule_AIMJNI_cimg_1verbosity_1get(JNIEnv *jenv, jclass jcls) {
+  jint jresult = 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (int)(2);
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jint JNICALL Java_org_dobots_picturetransformmodule_AIMJNI_cimg_1display_1get(JNIEnv *jenv, jclass jcls) {
+  jint jresult = 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (int)(0);
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
 SWIGEXPORT void JNICALL Java_org_dobots_picturetransformmodule_AIMJNI_AIMandroidReadPort_1t_1success_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jboolean jarg2) {
   AIMandroidReadPort_t *arg1 = (AIMandroidReadPort_t *) 0 ;
   bool arg2 ;
@@ -296,6 +320,18 @@ SWIGEXPORT void JNICALL Java_org_dobots_picturetransformmodule_AIMJNI_delete_1AI
 }
 
 
+SWIGEXPORT jlong JNICALL Java_org_dobots_picturetransformmodule_AIMJNI_new_1PictureTransformModule(JNIEnv *jenv, jclass jcls) {
+  jlong jresult = 0 ;
+  PictureTransformModule *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (PictureTransformModule *)new PictureTransformModule();
+  *(PictureTransformModule **)&jresult = result; 
+  return jresult;
+}
+
+
 SWIGEXPORT void JNICALL Java_org_dobots_picturetransformmodule_AIMJNI_PictureTransformModule_1Tick(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   PictureTransformModule *arg1 = (PictureTransformModule *) 0 ;
   
@@ -331,18 +367,6 @@ SWIGEXPORT jlong JNICALL Java_org_dobots_picturetransformmodule_AIMJNI_PictureTr
   arg1 = *(PictureTransformModule **)&jarg1; 
   result = (arg1)->androidReadPort();
   *(AIMandroidReadPort_t **)&jresult = new AIMandroidReadPort_t((const AIMandroidReadPort_t &)result); 
-  return jresult;
-}
-
-
-SWIGEXPORT jlong JNICALL Java_org_dobots_picturetransformmodule_AIMJNI_new_1PictureTransformModule(JNIEnv *jenv, jclass jcls) {
-  jlong jresult = 0 ;
-  PictureTransformModule *result = 0 ;
-  
-  (void)jenv;
-  (void)jcls;
-  result = (PictureTransformModule *)new PictureTransformModule();
-  *(PictureTransformModule **)&jresult = result; 
   return jresult;
 }
 
