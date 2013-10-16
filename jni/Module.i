@@ -6,12 +6,26 @@ module name has to be equal to the LOCAL_MODULE in the Android.mk file
 ndk-build clean && ndk-build -j
 */
 
-%module AIM
+%module(directors="1") AIM
+
+/* Enable using vectors and strings in the functions */
+%include "std_vector.i"
+%include "std_string.i"
+/* Options are: deque, list, map, pair, set, string, vector, shared_ptr */ 
+
+/* Need to instantiate different types of vector */
+namespace std {
+	%template(vector_int) vector<int>;
+	%template(vector_float) vector<float>;
+};
 
 /* Declerations */
 %{
 #include "Module.h"
 %}
+
+/* A base class for callbacks from C++ to output text on the Java side */
+%feature("director") Streamer;
 
 /* What to export */
 %include "Module.h"

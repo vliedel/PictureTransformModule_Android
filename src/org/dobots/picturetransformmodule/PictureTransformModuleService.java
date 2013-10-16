@@ -258,15 +258,34 @@ public class PictureTransformModuleService extends Service {
 //	}
 	// ----- End copy & paste
     
-    
+	
+	class LogStreamer extends Streamer {
+		public void display(String text) {
+			Log.i(TAG, "C++ " + text);
+		}
+	}
+	
 	// AsyncTask<Params, Progress, Result>
 	private class AIMRun extends AsyncTask<Integer, Void, Boolean> {
 		protected Boolean doInBackground(Integer... id) {
+			Log.i(TAG, "Starting AIMRun");
 			int input = 3;
 			PictureTransformModule aim = new PictureTransformModule();
+
+			LogStreamer logStreamer = new LogStreamer();
+			AIM.setStreamer(logStreamer);
+			
 			AIMandroidReadPort_t output;
+			AIMandroidReadSeqPort_t seqOutput;
+			
+			vector_float seqInput = new vector_float();
+			seqInput.add(1);
+			seqInput.add(2);
+			seqInput.add(3);
+			//vector_float seqOutput = new vector_float();
+			
 			while (true) {
-//				Log.i(TAG, "mPortOutBuffer=" + mPortOutBuffer);
+				Log.i(TAG, "mPortOutBuffer=" + mPortOutBuffer);
 				synchronized(mPortOutBuffer) {
 					if (!mPortOutBuffer.isEmpty()) {
 						input = Math.round(mPortOutBuffer.get(0));
@@ -275,7 +294,11 @@ public class PictureTransformModuleService extends Service {
 					}
 				}
 //				aim.androidWritePort(input);
+				
+				aim.androidWriteSeqPort(seqInput);
+				
 				aim.Tick();
+				
 				output = aim.androidReadPort();
 				if (output.getSuccess()) {
 					Log.i(TAG, "Output=" + output.getVal());
@@ -286,6 +309,16 @@ public class PictureTransformModuleService extends Service {
 					msg.setData(bundle);
 					msgSend(mPortOutMessenger, msg);
 				}
+				
+				seqOutput = aim.androidReadSeqPort();
+				if (seqOutput.getSuccess()) {
+					Log.i(TAG, "seqOutput=" + seqOutput.getVal().toString() + " ");
+					for (int i=0; i<seqOutput.getVal().size(); i++) {
+						Log.i(TAG, seqOutput.getVal().get(i) + " ");
+					}
+					
+				}
+				
 				if (isCancelled()) break;
 			}
 			return true;

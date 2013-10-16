@@ -9,17 +9,63 @@
 package org.dobots.picturetransformmodule;
 
 public class AIMJNI {
+  public final static native long new_vector_int__SWIG_0();
+  public final static native long new_vector_int__SWIG_1(long jarg1);
+  public final static native long vector_int_size(long jarg1, vector_int jarg1_);
+  public final static native long vector_int_capacity(long jarg1, vector_int jarg1_);
+  public final static native void vector_int_reserve(long jarg1, vector_int jarg1_, long jarg2);
+  public final static native boolean vector_int_isEmpty(long jarg1, vector_int jarg1_);
+  public final static native void vector_int_clear(long jarg1, vector_int jarg1_);
+  public final static native void vector_int_add(long jarg1, vector_int jarg1_, int jarg2);
+  public final static native int vector_int_get(long jarg1, vector_int jarg1_, int jarg2);
+  public final static native void vector_int_set(long jarg1, vector_int jarg1_, int jarg2, int jarg3);
+  public final static native void delete_vector_int(long jarg1);
+  public final static native long new_vector_float__SWIG_0();
+  public final static native long new_vector_float__SWIG_1(long jarg1);
+  public final static native long vector_float_size(long jarg1, vector_float jarg1_);
+  public final static native long vector_float_capacity(long jarg1, vector_float jarg1_);
+  public final static native void vector_float_reserve(long jarg1, vector_float jarg1_, long jarg2);
+  public final static native boolean vector_float_isEmpty(long jarg1, vector_float jarg1_);
+  public final static native void vector_float_clear(long jarg1, vector_float jarg1_);
+  public final static native void vector_float_add(long jarg1, vector_float jarg1_, float jarg2);
+  public final static native float vector_float_get(long jarg1, vector_float jarg1_, int jarg2);
+  public final static native void vector_float_set(long jarg1, vector_float jarg1_, int jarg2, float jarg3);
+  public final static native void delete_vector_float(long jarg1);
   public final static native int cimg_verbosity_get();
   public final static native int cimg_display_get();
+  public final static native void Streamer_display(long jarg1, Streamer jarg1_, String jarg2);
+  public final static native void delete_Streamer(long jarg1);
+  public final static native long new_Streamer();
+  public final static native void Streamer_director_connect(Streamer obj, long cptr, boolean mem_own, boolean weak_global);
+  public final static native void Streamer_change_ownership(Streamer obj, long cptr, boolean take_or_release);
+  public final static native void setStreamer(long jarg1, Streamer jarg1_);
+  public final static native long getStreamer();
   public final static native void AIMandroidReadPort_t_success_set(long jarg1, AIMandroidReadPort_t jarg1_, boolean jarg2);
   public final static native boolean AIMandroidReadPort_t_success_get(long jarg1, AIMandroidReadPort_t jarg1_);
   public final static native void AIMandroidReadPort_t_val_set(long jarg1, AIMandroidReadPort_t jarg1_, int jarg2);
   public final static native int AIMandroidReadPort_t_val_get(long jarg1, AIMandroidReadPort_t jarg1_);
   public final static native long new_AIMandroidReadPort_t();
   public final static native void delete_AIMandroidReadPort_t(long jarg1);
+  public final static native void AIMandroidReadSeqPort_t_success_set(long jarg1, AIMandroidReadSeqPort_t jarg1_, boolean jarg2);
+  public final static native boolean AIMandroidReadSeqPort_t_success_get(long jarg1, AIMandroidReadSeqPort_t jarg1_);
+  public final static native void AIMandroidReadSeqPort_t_val_set(long jarg1, AIMandroidReadSeqPort_t jarg1_, long jarg2, vector_float jarg2_);
+  public final static native long AIMandroidReadSeqPort_t_val_get(long jarg1, AIMandroidReadSeqPort_t jarg1_);
+  public final static native long new_AIMandroidReadSeqPort_t();
+  public final static native void delete_AIMandroidReadSeqPort_t(long jarg1);
   public final static native long new_PictureTransformModule();
   public final static native void PictureTransformModule_Tick(long jarg1, PictureTransformModule jarg1_);
   public final static native void PictureTransformModule_androidWritePort(long jarg1, PictureTransformModule jarg1_, int jarg2);
   public final static native long PictureTransformModule_androidReadPort(long jarg1, PictureTransformModule jarg1_);
+  public final static native void PictureTransformModule_androidWriteSeqPort(long jarg1, PictureTransformModule jarg1_, long jarg2, vector_float jarg2_);
+  public final static native long PictureTransformModule_androidReadSeqPort(long jarg1, PictureTransformModule jarg1_);
   public final static native void delete_PictureTransformModule(long jarg1);
+
+  public static void SwigDirector_Streamer_display(Streamer self, String text) {
+    self.display(text);
+  }
+
+  private final static native void swig_module_init();
+  static {
+    swig_module_init();
+  }
 }

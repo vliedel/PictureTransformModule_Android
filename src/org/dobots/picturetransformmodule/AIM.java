@@ -9,4 +9,12 @@
 package org.dobots.picturetransformmodule;
 
 public class AIM implements AIMConstants {
+  public static void setStreamer(Streamer streamer) {
+    AIMJNI.setStreamer(Streamer.getCPtr(streamer), streamer);
+  }
+
+  public static Streamer getStreamer() {
+    return new Streamer(AIMJNI.getStreamer(), false);
+  }
+
 }

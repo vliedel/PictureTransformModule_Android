@@ -51,4 +51,12 @@ public class PictureTransformModule {
     return new AIMandroidReadPort_t(AIMJNI.PictureTransformModule_androidReadPort(swigCPtr, this), true);
   }
 
+  public void androidWriteSeqPort(vector_float in) {
+    AIMJNI.PictureTransformModule_androidWriteSeqPort(swigCPtr, this, vector_float.getCPtr(in), in);
+  }
+
+  public AIMandroidReadSeqPort_t androidReadSeqPort() {
+    return new AIMandroidReadSeqPort_t(AIMJNI.PictureTransformModule_androidReadSeqPort(swigCPtr, this), true);
+  }
+
 }

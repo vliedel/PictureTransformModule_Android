@@ -2,6 +2,17 @@
 #include <iostream>
 #include <unistd.h> // To use usleep()
 
+#define DEBUG_STREAM
+#ifdef DEBUG_STREAM
+static Streamer * streamerInstance = 0;
+void setStreamer(Streamer* streamer) {
+  streamerInstance = streamer;
+}
+Streamer& getStreamer() {
+  return *streamerInstance;
+}
+#endif
+
 using namespace cimg_library;
 
 PictureTransformModule::PictureTransformModule() {
@@ -21,6 +32,15 @@ void PictureTransformModule::Tick() {
 		//writePort(*readInt);
 		writePort(mIntImg.mean());
 	}
+
+	std::vector<float>* readVec;
+	readVec = readSeqPort(false);
+	if (readVec != NULL && !readVec->empty()) {
+		std::vector<float> read;
+		readVec->swap(read);
+		writeSeqPort(read);
+	}
+
 	usleep(1000*1000);
 }
 
@@ -66,4 +86,50 @@ int* PictureTransformModule::readPort(bool blocking) {
 	mReadVal = mReadBuf.back();
 	mReadBuf.pop_back();
 	return &mReadVal;
+}
+
+
+
+void PictureTransformModule::androidWriteSeqPort(std::vector<float> in) {
+	mReadSeqBuf.push_back(in);
+#ifdef DEBUG_STREAM
+//	getStreamer() << "androidWriteSeqPort in.size=" << in.size() << " mReadSeqBuf.size=" << mReadSeqBuf.size() << "\n";
+	getStreamer() << "androidWriteSeqPort";
+	for (int i=0; i<in.size(); ++i)
+		getStreamer() << in[i];
+	getStreamer() << "\n";
+#endif
+}
+
+AIMandroidReadSeqPort_t PictureTransformModule::androidReadSeqPort() {
+	AIMandroidReadSeqPort_t ret;
+
+#ifdef DEBUG_STREAM
+//	getStreamer() << "androidReadSeqPort mWriteSeqBuf.size=" << mWriteSeqBuf.size() << "\n";
+//	if (!mWriteSeqBuf.empty())
+//		getStreamer() << "mWriteSeqBuf.back().size()=" << mWriteSeqBuf.back().size();
+//	getStreamer() << "\n";
+#endif
+
+	if (mWriteSeqBuf.empty()) {
+		ret.success = false;
+		return ret;
+	}
+	mWriteSeqBuf.back().swap(ret.val);
+	ret.success = true;
+	mWriteSeqBuf.pop_back();
+	return ret;
+}
+
+void PictureTransformModule::writeSeqPort(std::vector<float> &out) {
+	//mWriteBuf.push_back(out); // This way out should not be changed by the user anymore..
+	mWriteSeqBuf.push_back(std::vector<float>(out)); // This way out should not be changed by the user anymore..
+}
+
+std::vector<float>* PictureTransformModule::readSeqPort(bool blocking) {
+	if (mReadSeqBuf.empty())
+		return NULL;
+	mReadSeqBuf.back().swap(mReadSeqVal);
+	mReadSeqBuf.pop_back();
+	return &mReadSeqVal;
 }
