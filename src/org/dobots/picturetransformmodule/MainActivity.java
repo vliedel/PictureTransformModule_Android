@@ -1,5 +1,8 @@
 package org.dobots.picturetransformmodule;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -33,7 +36,10 @@ public class MainActivity extends Activity {
 	
 	TextView mCallbackText;
 	Button mButtonStartStop;
+	
 	boolean mServiceIsRunning;
+	Timer mCheckServiceTimer;
+	CheckServiceTimerTask mCheckServiceTimerTask;
 	
 	
 	// Copied from MsgService, should be an include?
@@ -79,8 +85,8 @@ public class MainActivity extends Activity {
 		    }
 		});
         
-                
         checkServiceRunning();
+        mCheckServiceTimer = new Timer();
        
 //        doBindService();
         
@@ -99,12 +105,16 @@ public class MainActivity extends Activity {
 	public void onResume() {
 		super.onResume();
 		Log.i(TAG,"onResume");
+		mCheckServiceTimerTask = new CheckServiceTimerTask();
+		mCheckServiceTimer.schedule(mCheckServiceTimerTask ,0, 1000);
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
 		Log.i(TAG,"onPause");
+		//mCheckServiceTimer.purge();
+		mCheckServiceTimerTask.cancel();
 	}
 
 	@Override
@@ -118,6 +128,7 @@ public class MainActivity extends Activity {
 		super.onDestroy();
 //		Log.i(TAG, "onDestroy " + mMsgServiceIsBound);
 		Log.i(TAG, "onDestroy");
+		mCheckServiceTimer.cancel();
 //		doUnbindService();
 	}
 
@@ -144,7 +155,24 @@ public class MainActivity extends Activity {
 //        finish();
     }
     
+    private void timedCheck() {
+    	this.runOnUiThread(new Runnable() {
+        	@Override
+    		public void run() {
+        		checkServiceRunning();
+        	}
+        });
+    }
+    private class CheckServiceTimerTask extends TimerTask {
+    	@Override
+    	public void run() {
+    		timedCheck();
+    		//checkServiceRunning(); // Can't do this, it has to run on the UI thread
+    	}
+    }
+    
     private boolean checkServiceRunning() {
+    	Log.i(TAG, "Checking if service is running");
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
             if (PictureTransformModuleService.class.getName().equals(service.service.getClassName())) {
