@@ -8,6 +8,8 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningServiceInfo;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -30,7 +32,8 @@ public class MainActivity extends Activity {
 //	Messenger mPortOutMessenger = null;
 	
 	TextView mCallbackText;
-	Button mButtonStop;
+	Button mButtonStartStop;
+	boolean mServiceIsRunning;
 	
 	
 	// Copied from MsgService, should be an include?
@@ -61,25 +64,29 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         
         mCallbackText = (TextView) findViewById(R.id.messageOutput);
-        mButtonStop = (Button) findViewById(R.id.buttonStop);
+        mButtonStartStop = (Button) findViewById(R.id.buttonStartStop);
         
-        mButtonStop.setOnClickListener(new View.OnClickListener() {
+        mButtonStartStop.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-		        stopService();
+		        if (mServiceIsRunning) {
+		        	stopService();
+		        }
+		        else {
+		        	startService();
+		        }
+		        checkServiceRunning();
 		    }
 		});
         
-        Intent intent = new Intent();
-        intent.setClassName("org.dobots.picturetransformmodule", "org.dobots.picturetransformmodule.PictureTransformModuleService");
-        ComponentName name = startService(intent);
-        Log.i(TAG, "Starting: " + name.toString());
+                
+        checkServiceRunning();
        
 //        doBindService();
         
 //        Integer id = 0;
 //        new AIMRun().execute(id);
-
+        
     }
     
 	@Override
@@ -122,13 +129,35 @@ public class MainActivity extends Activity {
         return true;
     }
     
+    public void startService() {
+        Intent intent = new Intent();
+        intent.setClassName("org.dobots.picturetransformmodule", "org.dobots.picturetransformmodule.PictureTransformModuleService");
+        ComponentName name = startService(intent);
+        Log.i(TAG, "Starting: " + name.toString());
+    }
     
     public void stopService() {
     	Intent intent = new Intent();
         intent.setClassName("org.dobots.picturetransformmodule", "org.dobots.picturetransformmodule.PictureTransformModuleService");
         stopService(intent);
         Log.i(TAG, "Stopping service: " + intent.toString());
-        finish();
+//        finish();
+    }
+    
+    private boolean checkServiceRunning() {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (PictureTransformModuleService.class.getName().equals(service.service.getClassName())) {
+            	mServiceIsRunning = true;
+            	mButtonStartStop.setText("Stop module");
+            	mCallbackText.setText("Module is running");
+                return true;
+            }
+        }
+        mServiceIsRunning = false;
+        mButtonStartStop.setText("Start module");
+        mCallbackText.setText("Module stopped");
+        return false;
     }
     
 /*    

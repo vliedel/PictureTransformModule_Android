@@ -40,12 +40,12 @@ class PictureTransformModule {
 	public:
 		PictureTransformModule();
 		void Tick();
+
 		void androidWritePort(int in);
-//		int* androidReadPort();
-		AIMandroidReadPort_t androidReadPort();
+		AIMandroidReadPort_t androidReadPort(); // TODO: make this a callback
 
 		void androidWriteSeqPort(std::vector<float> in);
-		AIMandroidReadSeqPort_t androidReadSeqPort();
+		AIMandroidReadSeqPort_t androidReadSeqPort(); // TODO: make this a callback
 
 	private:
 		std::vector<int> mWriteBuf;
